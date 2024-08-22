@@ -4,11 +4,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/pages/uploadLyrics.css">
     <title>Music API (Version 2) | Upload Lyrics</title>
+    <script defer src="/js/uploadLyrics.js"></script>
 </head>
 
 <body>
-    <h1>Upload Lyrics for [song]</h1>
+    <h1 class="page-title">Upload Lyrics for [song]</h1>
+    <div class="form-container">
+        <form class="form" id="lyricsForm">
+            <div id="sectionsContainer">
+                <fieldset class="radio-fieldset">
+                    <div class="radio">
+                        <input type="radio" name="section-type-0" id="intro-0" checked>
+                        <label for="intro-0">Intro</label>
+                    </div>
+                    <div class="radio">
+                        <input type="radio" name="section-type-0" id="verse-0">
+                        <label for="verse-0">Verse</label>
+                    </div>
+                    <div class="radio">
+                        <input type="radio" name="section-type-0" id="chorus-0">
+                        <label for="chorus-0">Chorus</label>
+                    </div>
+                    <div class="radio">
+                        <input type="radio" name="section-type-0" id="hook-0">
+                        <label for="hook-0">Hook</label>
+                    </div>
+                    <div class="radio">
+                        <input type="radio" name="section-type-0" id="bridge-0">
+                        <label for="bridge-0">Bridge</label>
+                    </div>
+                </fieldset>
+                <textarea name="Lyrics-0" id="Lyrics-0" class="textarea" placeholder="..."></textarea>
+            </div>
+            <button type="button" id="addSectionButton">Add Section</button>
+            <button type="submit">Submit Lyrics</button>
+        </form>
+    </div>
+    <script>
+        const songData = JSON.parse('<%= songData %>');
+        document.querySelector('.page-title').textContent = `Upload Lyrics for ${songData.title}`;
+    </script>
 </body>
 
 </html>

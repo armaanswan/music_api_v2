@@ -4,11 +4,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/pages/uploadMetadata.css">
     <title>Music API (Version 2) | Upload Metadata</title>
 </head>
 
 <body>
-    <h1>Upload Metadata</h1>
+    <h1 class="page-title">Upload Metadata</h1>
+    <div class="form-container">
+        <form class="form">
+            <fieldset class="fieldset">
+                <input type="text" name="title" id="title" placeholder="Song Title" class="input" required>
+                <div class="checkbox-container">
+                    <input type="checkbox" name="single" id="single" value="Single" class="checkbox">
+                    <label for="single" class="checkbox-label">Single</label>
+                </div>
+                <div class="checkbox-container">
+                    <input type="checkbox" name="explicit" id="explicit" value="Explicit" class="checkbox">
+                    <label for="explicit" class="checkbox-label">Explicit</label>
+                </div>
+            </fieldset>
+
+            <input type="text" name="album_title" id="album_title" placeholder="Album Title" class="input" required>
+
+            <fieldset class="fieldset">
+                <input type="datetime" name="release_date" id="release_date" placeholder="Release Date" class="input">
+                <input type="number" name="year" id="year" placeholder="Year" class="input" min="2000">
+                <input type="number" name="track_number" id="track_number" placeholder="Track Number" class="input"
+                    min="1">
+                <input type="number" name="disk_number" id="disk_number" placeholder="Disk Number" class="input"
+                    min="1">
+            </fieldset>
+
+            <fieldset class="fieldset">
+                <input type="text" name="isrc" id="isrc" placeholder="ISRC" class="input">
+                <input type="text" name="label" id="label" placeholder="Label" class="input">
+            </fieldset>
+
+            <fieldset class="fieldset">
+                <input type="number" name="duration" id="duration" placeholder="Duration" class="input" min="1">
+                <input type="text" name="genre" id="genre" placeholder="Genre" class="input">
+                <input type="text" name="language_code" id="language_code" placeholder="Language Code" class="input">
+            </fieldset>
+
+            <input type="text" name="youtube_url" id="youtube_url" placeholder="YouTube URL" class="input">
+            <input type="text" name="youtube_music_url" id="youtube_music_url" placeholder="YouTube Music URL"
+                class="input">
+            <input type="text" name="spotify_url" id="spotify_url" placeholder="Spotify URL" class="input">
+            <input type="text" name="apple_music_url" id="apple_music_url" placeholder="Apple Music URL" class="input">
+            <input type="text" name="shazam_url" id="shazam_url" placeholder="Shazam URL" class="input">
+            <input type="text" name="soundcloud_url" id="soundcloud_url" placeholder="Soundcloud URL" class="input">
+            <input type="text" name="amazon_music_url" id="amazon_music_url" placeholder="Amazon Music URL"
+                class="input">
+            <span class="submit-response-message"></span>
+            <button class="button" type="submit">Upload Metadata</button>
+        </form>
+    </div>
+
+    <script>
+        const form = document.querySelector('.form');
+        const submitResponseMsg = document.querySelector('.submit-response-message');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+
+            const data = {
+                'title': form.title.value,
+                'single': form.single.checked ? true : false,
+                'explicit': form.explicit.checked ? true : false,
+                'album_title': form.album_title.value,
+                'release_date': form.release_date.value, // timestamp
+                'year': Number(form.year.value),
+                'track_number': Number(form.track_number.value),
+                'disk_number': Number(form.disk_number.value),
+                'isrc': form.isrc.value,
+                'label': form.label.value,
+                'duration': Number(form.duration.value),
+                'genre': form.genre.value,
+                'language_code': form.language_code.value,
+                'socials': {
+                    'youtube_url': form.youtube_url.value,
+                    'youtube_music_url': form.youtube_music_url.value,
+                    'spotify_url': form.spotify_url.value,
+                    'apple_music_url': form.apple_music_url.value,
+                    'shazam_url': form.shazam_url.value,
+                    'soundcloud_url': form.soundcloud_url.value,
+                    'amazon_music_url': form.amazon_music_url.value,
+                },
+                'sections': []
+            };
+
+            fetch('/songs/upload/metadata', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    submitResponseMsg.textContent = 'Success uploading song!';
+                    window.location.href = data.redirectUrl;
+                })
+                .catch(error => {
+                    submitResponseMsg.textContent = 'Error uploading song!';
+                    console.log(error);
+                });
+        });
+    </script>
 </body>
 
 </html>

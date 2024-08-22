@@ -5,6 +5,10 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Set view engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
 // Firebase Admin SDK
 const { db } = require('./config/firebase');
 
@@ -14,6 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
 
 // Route handlers
+const indexRouter = require('./routes/index');
 const songsRouter = require('./routes/songs');
 
 // Add Firestore to request object
@@ -24,11 +29,7 @@ app.use((req, res, next) => {
 
 // Define routes
 app.use('/songs', songsRouter);
-
-// Serve index.html at the root
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'index.html'));
-});
+app.use('/', indexRouter);
 
 // Start the server
 app.listen(port, () => {

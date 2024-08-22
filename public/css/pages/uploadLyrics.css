@@ -1,0 +1,37 @@
+.page-title {
+    grid-column: 1/13;
+}
+
+.form-container {
+    grid-column: 1/13;
+    padding: 3rem 5rem;
+}
+
+.form .radio-fieldset {
+    border: 0;
+    font-size: 1rem;
+    display: flex;
+    gap: 3rem;
+    text-transform: uppercase;
+    font-family: monospace;
+    color: #808080;
+}
+
+.form .radio-fieldset .radio {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.form .textarea {
+    font-size: 5rem;
+    font-weight: 700;
+    border: 0;
+    padding: 1rem 0;
+    width: 100%;
+    field-sizing: content;
+    margin-top: 2rem;
+}
+
+.form .textarea:focus {
+    outline: none;
+}

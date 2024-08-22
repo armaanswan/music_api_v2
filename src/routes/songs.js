@@ -10,27 +10,37 @@ router.get('/upload/metadata', (req, res) => {
 
 // Handle metadata submission
 router.post('/upload/metadata', async (req, res) => {
-    const { title, artist, album } = req.body;
+    const data = req.body;
     const db = req.db;
 
     try {
-        const songRef = await db.collection('songs').add({
-            title,
-            artist,
-            album,
-            createdAt: new Date(),
-        });
-
-        res.redirect(`/songs/upload/lyrics/${songRef.id}`);
+        const docRef = await db.collection('songs').add(data);
+        res.json({ redirectUrl: `/songs/upload/lyrics/${docRef.id}` });
     } catch (error) {
         console.error('Error adding document: ', error);
-        res.status(500).send('Error uploading metadata');
+        res.status(500).send('Error uploading metadata!');
     }
 });
 
 // Serve the lyrics upload form
-router.get('/upload/lyrics/:id', (req, res) => {
-    res.sendFile(path.join(__dirname, '../views/uploadLyrics.html'));
+router.get('/upload/lyrics/:id', async (req, res) => {
+    const songId = req.params.id;
+    const db = req.db;
+
+    try {
+        const docRef = db.collection('songs').doc(songId);
+        const doc = await docRef.get();
+
+        if (!doc.exists) {
+            return res.status(404).send('Song not found!');
+        }
+
+        const songData = doc.data();
+        res.render('uploadLyrics', { songData: JSON.stringify(songData) });
+    } catch (error) {
+        console.error('Error fetching song:', error);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
 // Handle lyrics submission
